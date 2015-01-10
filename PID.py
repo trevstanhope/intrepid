@@ -3,17 +3,20 @@ import thread
 from itertools import cycle
 import numpy as np
 
-class PID:
+"""
+PID Class for continuous systems
+"""
+class sPID:
     
-    def __init__(self, N=5):
-        self.p = 0
-        self.i = 0
-        self.d = 0
-        self.k_p = 0
-        self.k_i = 0
-        self.k_d = 0
-        self.ref = 0
-        self.sig = 0
+    def __init__(self, N=5, P=0, I=0, D=0, KP=1, KI=1, KD=1, REF=0, SIG=0):
+        self.p = P
+        self.i = I
+        self.d = D
+        self.k_p = KP
+        self.k_i = KI
+        self.k_d = KD
+        self.ref = REF
+        self.sig = SIG
         self.output = 0
         self.pool = [0] * N
         self.mag = 0
@@ -25,7 +28,7 @@ class PID:
         self.i = np.mean(self.pool)
         self.d = self.sig - self.pool[-1] # difference from last
         self.pool[-1] = self.p # add newest value to pool, forget oldest
-        self.output = self.k_p * self.p + self.k_i * self.i + self.k_d * self.d
+        self.output = self.k_p * self.p + self.k_i * self.i + self.k_d * self.d # calculate sum
         self.pool.reverse()
         self.pool.pop()
         self.pool.reverse()
@@ -36,3 +39,10 @@ class PID:
         
     def setpoint(self):
         return self.ref
+
+"""
+PID Class for discrete systems
+"""
+class zPID:
+    def __init__(self):
+        pass
